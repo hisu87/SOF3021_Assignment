@@ -1,3 +1,19 @@
+<div align="center">
+    <img src="assets/banner.png" width="800px" />
+</div>
+
+<div align="center">
+
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-1.3.3-brightgreen)](https://developer.android.com/jetpack/androidx/versions/all-channel)
+[![Forks](https://img.shields.io/github/forks/solana-mobile/Minty-fresh)](https://github.com/solana-mobile/Minty-fresh/network)
+[![Stars](https://img.shields.io/github/stars/solana-mobile/Minty-fresh)](https://github.com/solana-mobile/Minty-fresh/stargazers)
+[![Issues](https://img.shields.io/github/issues/solana-mobile/Minty-fresh)](https://github.com/solana-mobile/Minty-fresh/issues)
+[![License](https://img.shields.io/github/license/solana-mobile/Minty-fresh)](https://github.com/solana-mobile/Minty-fresh/blob/main/LICENSE.md)
+[![Release (latest by date)](https://img.shields.io/github/v/release/solana-mobile/Minty-fresh)](https://github.com/solana-mobile/Minty-fresh/releases/latest)
+[![Follow us](https://img.shields.io/twitter/url?label=follow&style=social&url=https%3A%2F%2Ftwitter.com%2Fsolanamobile)](https://twitter.com/solanamobile)
+
+</div>
 ## Project Coffee Shop Management 
  ### Welcome to Project  Coffee Shop Management 
 The software application, Project  Coffee Shop Management , helps a coffee shop manage its daily operations smoothly. <br>
