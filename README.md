@@ -9,7 +9,7 @@ The application aims to boost the coffee shop's efficiency, productivity, and pr
 
   
 <div id="header" align="center">
-  <img src="https://media.giphy.com/media/RbDKaczqWovIugyJmW/giphy.gif"/>
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXdoMDk5MnEweXY5YjlmMmxoN2FkOXFiaTJnZXpnc3RzbWRja3U0MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bGgsc5mWoryfgKBx1u/giphy.gif"/>
 </div>
 
 ---
