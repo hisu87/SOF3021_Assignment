@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="assets/banner.png" width="800px" />
+    <img src="https://cdn.dribbble.com/userupload/7997436/file/original-1d1f31d8dcb8027d22cf2fed733c3707.jpg?resize=1024x768" width="800px" />
 </div>
 
 <div align="center">
