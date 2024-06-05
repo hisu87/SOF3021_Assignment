@@ -29,14 +29,16 @@
             <c:forEach var="drink" items="${drinks}">
             	<%@ include file="/layout/user/_drink-item.jsp" %>
             </c:forEach>
+
           </div>
           <div class="col-lg-12" style="display: flex; justify-content: space-around;">
           	<a class="tm-more-button" href="/menu"><s:message code="home.order1"/></a> 
-          </div>    
+          </div>
+
         </section>
         
         <%@ include file="/layout/user/_daily_menu.jsp" %>
-        
+
       </div>
     </div> 
     
