@@ -36,6 +36,15 @@
                 <p>${drink.description }</p>
                 <a href="/cart/add/${drink.id}" class="tm-more-button margin-top-30"><s:message code="home.cart"/></a>    
               </div>
+              <script
+                      async
+                      src="https://js.stripe.com/v3/buy-button.js">
+              </script>
+              <stripe-buy-button
+                      buy-button-id="{{BUY_BUTTON_ID}}"
+                      publishable-key="pk_test_51PLGMcCbhQpSDJrJ0um8tb9zKWJq6b6Yc6TALw0JODtJCEj5C7AGLnM1yQsb44vbqp2mzGO0RaxIsc4m4QdeJM2C003CVMjzgq"
+              >
+              </stripe-buy-button>
             </div>
           </div>          
         </section>
