@@ -42,6 +42,14 @@ public class ToppingManagementController {
 		return toppingService.findAll();
 	}
 
+	/**
+	 * Saves a topping and updates the model attributes accordingly.
+	 * 
+	 * @param model   the model object to be updated
+	 * @param topping the topping object to be saved
+	 * @param result  the binding result object for validation errors
+	 * @return the view name for the topping management page
+	 */
 	@PostMapping("admin/topping")
 	public String save(Model model, @Valid @ModelAttribute("topping") Topping topping, BindingResult result) {
 
@@ -70,6 +78,13 @@ public class ToppingManagementController {
 		return "admin/topping-management";
 	}
 
+	/**
+	 * Phương thức edit được sử dụng để chỉnh sửa thông tin một đối tượng Topping.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param id    id của đối tượng Topping cần chỉnh sửa.
+	 * @return tên của view được hiển thị sau khi chỉnh sửa thành công.
+	 */
 	@GetMapping(value = "admin/topping", params = "btnEdit")
 	public String edit(Model model, @RequestParam("id") Integer id) {
 
@@ -90,6 +105,13 @@ public class ToppingManagementController {
 		return "redirect:/admin/topping";
 	}
 
+	/**
+	 * Xóa một mục trong danh sách topping dựa trên id.
+	 * 
+	 * @param id    id của mục cần xóa
+	 * @param model đối tượng Model để truyền dữ liệu cho view
+	 * @return chuỗi chứa đường dẫn redirect đến trang quản lý topping
+	 */
 	@GetMapping(value = "admin/topping", params = "btnDel")
 	public String deleteInline(@RequestParam("id") Integer id, Model model) {
 

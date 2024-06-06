@@ -11,10 +11,18 @@ import com.poly.entity.User;
 
 @Service
 public class UserRootService implements UserDetailsService {
-	
+
 	@Autowired
 	UserDAO userDAO;
 
+	/**
+	 * Tải thông tin người dùng theo tên đăng nhập.
+	 *
+	 * @param email Tên đăng nhập của người dùng.
+	 * @return Thông tin người dùng.
+	 * @throws UsernameNotFoundException Nếu không tìm thấy người dùng với tên đăng
+	 *                                   nhập đã cho.
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userDAO.findByEmail(email)

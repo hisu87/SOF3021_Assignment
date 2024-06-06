@@ -40,6 +40,12 @@ public class CheckoutController {
 	@Autowired
 	SessionService sessionService;
 
+	/**
+	 * Phương thức lấy thông tin thanh toán.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu tới view.
+	 * @return tên của view để hiển thị trang thanh toán.
+	 */
 	@GetMapping("checkout")
 	public String getCheckout(Model model) {
 		User currentUser = sessionService.getAttribute("currentUser");
@@ -52,7 +58,7 @@ public class CheckoutController {
 		model.addAttribute("user", user);
 
 		ShoppingCart cart = user.getCart();
-		
+
 		if (cart.getCartItems().isEmpty()) {
 			return "redirect:/home";
 		}
@@ -68,11 +74,21 @@ public class CheckoutController {
 		return "user/checkout";
 	}
 
+	/**
+	 * Phương thức checkout được sử dụng để xử lý việc thanh toán đơn hàng.
+	 * 
+	 * @param order         Đối tượng Order chứa thông tin về đơn hàng.
+	 * @param addressString Địa chỉ giao hàng dưới dạng chuỗi.
+	 * @param phoneNumber   Số điện thoại người nhận hàng.
+	 * @param model         Đối tượng Model để truyền dữ liệu giữa Controller và
+	 *                      View.
+	 * @return Chuỗi kết quả chuyển hướng đến các trang tương ứng.
+	 */
 	@PostMapping("checkout")
 	public String checkout(@ModelAttribute("order") Order order, @RequestParam("addressString") String addressString,
 			@RequestParam("phoneNumber") String phoneNumber,
 			Model model) {
-		
+
 		if (phoneNumber.equals("")) {
 			return "redirect:/account/profile";
 		}
@@ -129,7 +145,7 @@ public class CheckoutController {
 			order.setAddress(address);
 
 			orderService.saveOrder(cart, order);
-			
+
 			if (paymentMethod.getId() == 7) {
 				return "redirect:/payment/create_payment";
 			}
@@ -138,6 +154,15 @@ public class CheckoutController {
 		return "redirect:/order";
 	}
 
+	/**
+	 * Phương thức getOrder được sử dụng để lấy thông tin đơn hàng và hiển thị trang
+	 * đơn hàng cho người dùng.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu đến view.
+	 * @return chuỗi "user/order" để chuyển hướng người dùng đến trang đơn hàng,
+	 *         hoặc chuỗi "redirect:/account/login" để chuyển hướng người dùng đến
+	 *         trang đăng nhập nếu chưa đăng nhập.
+	 */
 	@GetMapping("order")
 	public String getOrder(Model model) {
 		User currentUser = sessionService.getAttribute("currentUser");
@@ -152,25 +177,42 @@ public class CheckoutController {
 		sessionService.setAttribute("totalItems", cart.getTotalItems());
 
 		List<Order> orders = orderService.findAllByUsername(user.getId());
-		
+
 		orders.forEach(order -> System.out.println(order.toString()));
-		
+
 		model.addAttribute("orders", orders);
 
 		return "user/order";
 	}
 
+	/**
+	 * Hàm cancelOrder dùng để hủy đơn hàng.
+	 * 
+	 * @param id ID của đơn hàng cần hủy
+	 * @return Chuỗi ký tự "redirect:/order" để chuyển hướng đến trang đơn hàng
+	 */
 	@GetMapping("order/cancel/{id}")
 	public String cancelOrder(@PathVariable("id") Long id) {
 		orderService.cancelOrder(id);
 		return "redirect:/order";
 	}
 
+	/**
+	 * Phương thức này trả về danh sách các phương thức thanh toán.
+	 *
+	 * @return Danh sách các phương thức thanh toán.
+	 */
 	@ModelAttribute("paymentMethods")
 	public List<PaymentMethod> getPaymentMethods() {
 		return paymentMethodDAO.findAll();
 	}
 
+	/**
+	 * Chuyển đổi một chuỗi địa chỉ thành một mảng các địa chỉ.
+	 *
+	 * @param addressString Chuỗi địa chỉ cần chuyển đổi.
+	 * @return Mảng các địa chỉ đã chuyển đổi từ chuỗi địa chỉ ban đầu.
+	 */
 	public String[] parseStringAddressToArray(String addressString) {
 		String[] arrAddress = null;
 		if (addressString.length() > 0) {
@@ -180,6 +222,12 @@ public class CheckoutController {
 		return arrAddress;
 	}
 
+	/**
+	 * Xóa khoảng trắng trong chuỗi.
+	 *
+	 * @param string chuỗi cần xóa khoảng trắng
+	 * @return chuỗi đã xóa khoảng trắng
+	 */
 	private String removeSpace(String string) {
 		return string.replaceAll(", ", ",");
 	}

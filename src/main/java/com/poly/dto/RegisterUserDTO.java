@@ -10,17 +10,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegisterUserDTO {
-	
+
 	@NotEmpty(message = "{NotEmpty.user.username}")
 	private String name;
-	
+
 	@NotEmpty(message = "{NotEmpty.user.password}")
 	private String password;
-	
+
 	@NotEmpty(message = "{NotEmpty.user.email}")
-	@Email(message = "{Email.user.email}") 
+	@Email(message = "{Email.user.email}")
 	private String email;
-	
+
 	@NotEmpty(message = "{NotEmpty.user.phoneNumber}")
 	private String phoneNumber;
 

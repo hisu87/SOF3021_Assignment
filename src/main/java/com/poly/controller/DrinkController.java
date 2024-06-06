@@ -19,21 +19,28 @@ public class DrinkController {
 
 	@Autowired
 	DrinkService drinkService;
-	
+
 	@Autowired
 	CategoryService categoryService;
-	
+
+	/**
+	 * Phương thức này trả về chi tiết sản phẩm đồ uống dựa trên id.
+	 * 
+	 * @param id    id của sản phẩm đồ uống
+	 * @param model đối tượng Model để truyền dữ liệu đến view
+	 * @return tên của view để hiển thị chi tiết sản phẩm đồ uống
+	 */
 	@GetMapping("drink/{id}")
 	public String getProductDetail(@PathVariable("id") Integer id, Model model) {
-		
+
 		Drink drink = drinkService.findById(id);
 		model.addAttribute("drink", drink);
-		
+
 		Category category = categoryService.findById(drink.getCategory().getId());
 		List<Drink> drinks = drinkService.findRelatedDrink(category, id, true, Limit.of(3));
 		model.addAttribute("drinks", drinks);
-		
+
 		return "user/detail";
 	}
-	
+
 }
