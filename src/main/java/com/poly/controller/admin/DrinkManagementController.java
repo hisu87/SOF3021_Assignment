@@ -40,6 +40,13 @@ public class DrinkManagementController {
 
 	boolean edit = false;
 
+	/**
+	 * Phương thức này trả về trang quản lý đồ uống cho quản trị viên.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu cho view.
+	 * @param page  tham số tùy chọn để xác định trang hiện tại.
+	 * @return tên của view hiển thị trang quản lý đồ uống cho quản trị viên.
+	 */
 	@GetMapping("admin/drink")
 	public String getDrinkManagement(Model model, @RequestParam("page") Optional<Integer> page) {
 
@@ -51,13 +58,22 @@ public class DrinkManagementController {
 
 		return "admin/drink-management";
 	}
-	
+
+	/**
+	 * Phương thức này trả về một trang danh sách các đối tượng Drink dựa trên các
+	 * tham số đầu vào.
+	 * 
+	 * @param page    Số trang hiện tại (tùy chọn)
+	 * @param keyword Từ khóa tìm kiếm (tùy chọn)
+	 * @return Trang danh sách các đối tượng Drink
+	 */
 	@ModelAttribute("drinks")
-	public Page<Drink> getDrinks(@RequestParam("page") Optional<Integer> page, @RequestParam("srch-term") Optional<String> keyword) {
+	public Page<Drink> getDrinks(@RequestParam("page") Optional<Integer> page,
+			@RequestParam("srch-term") Optional<String> keyword) {
 		Pageable pageable = PageRequest.of(page.orElse(0), 5);
 
 		Page<Drink> drinks = drinkService.searchByKeyword(keyword.orElse(""), pageable);
-		
+
 		return drinks;
 	}
 
@@ -66,6 +82,18 @@ public class DrinkManagementController {
 		return categoryService.findAll();
 	}
 
+	/**
+	 * Phương thức save được sử dụng để lưu thông tin về đồ uống vào cơ sở dữ liệu.
+	 * 
+	 * @param model   đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param drink   đối tượng Drink chứa thông tin về đồ uống cần lưu.
+	 * @param result  đối tượng BindingResult để kiểm tra lỗi nhập liệu.
+	 * @param photo   đối tượng MultipartFile chứa ảnh đồ uống.
+	 * @param page    đối tượng Optional<Integer> chứa số trang hiện tại.
+	 * @param keyword đối tượng Optional<String> chứa từ khóa tìm kiếm.
+	 * @return chuỗi "admin/drink-management" để chuyển hướng đến trang quản lý đồ
+	 *         uống.
+	 */
 	@PostMapping("admin/drink")
 	public String save(Model model, @Valid @ModelAttribute("drink") Drink drink, BindingResult result,
 			@RequestPart("photo") MultipartFile photo, @RequestParam("page") Optional<Integer> page,
@@ -102,6 +130,14 @@ public class DrinkManagementController {
 		return "admin/drink-management";
 	}
 
+	/**
+	 * Phương thức này được sử dụng để chỉnh sửa thông tin một đối tượng Drink trong
+	 * hệ thống.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param id    mã định danh của đối tượng Drink cần chỉnh sửa.
+	 * @return tên của trang View để hiển thị thông tin chỉnh sửa đối tượng Drink.
+	 */
 	@GetMapping(value = "admin/drink", params = "btnEdit")
 	public String edit(Model model, @RequestParam("id") Integer id) {
 		Drink drink = drinkService.findById(id);

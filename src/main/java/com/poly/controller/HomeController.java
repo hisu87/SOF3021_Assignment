@@ -22,21 +22,36 @@ import com.poly.utils.SessionService;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	SessionService sessionService;
-	
+
 	@Autowired
 	DrinkService drinkService;
-	
+
 	@Autowired
 	UserService userService;
 
+	/**
+	 * Phương thức getIndex() trả về tên của trang view "user/index" và thực hiện
+	 * các thao tác sau:
+	 * - Xóa giá trị của thuộc tính "security-uri" trong session.
+	 * - Lấy thông tin người dùng hiện tại từ session và gán vào biến currentUser.
+	 * - Nếu currentUser khác null, lấy thông tin người dùng từ cơ sở dữ liệu bằng
+	 * userService và gán vào biến user.
+	 * - Lấy giỏ hàng của người dùng từ biến user và gán vào biến cart.
+	 * - Gán số lượng sản phẩm trong giỏ hàng vào thuộc tính "totalItems" trong
+	 * session.
+	 * - Nếu currentUser là null, gán giá trị 0 vào thuộc tính "totalItems" trong
+	 * session.
+	 * 
+	 * @return Tên của trang view "user/index"
+	 */
 	@GetMapping("home")
 	public String getIndex() {
-		
+
 		sessionService.setAttribute("security-uri", null);
-		
+
 		User currentUser = sessionService.getAttribute("currentUser");
 
 		if (currentUser != null) {
@@ -49,11 +64,16 @@ public class HomeController {
 
 		return "user/index";
 	}
-	
+
+	/**
+	 * Phương thức này trả về danh sách các đồ uống.
+	 *
+	 * @return Danh sách các đồ uống.
+	 */
 	@ModelAttribute("drinks")
 	public List<Drink> getDrinks() {
 		List<Drink> drinks = drinkService.findAllByActive(true, Limit.of(12));
 		return drinks;
 	}
-	
+
 }

@@ -20,15 +20,25 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 	@Autowired
 	UserDAO userDAO;
 
+	/**
+	 * Phương thức loadUser được sử dụng để tải thông tin người dùng từ
+	 * OAuth2UserRequest.
+	 * 
+	 * @param userRequest OAuth2UserRequest chứa thông tin về yêu cầu người dùng
+	 *                    OAuth2.
+	 * @return OAuth2User chứa thông tin người dùng từ OAuth2UserRequest.
+	 * @throws OAuth2AuthenticationException nếu có lỗi xảy ra trong quá trình tải
+	 *                                       thông tin người dùng.
+	 */
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 		String typeOAuth = userRequest.getClientRegistration().getClientName();
 
 		OAuth2UserInfo oAuth2UserInfo = switch (typeOAuth) {
-		case "Google" -> new GoogleUserInfo(oAuth2User.getAttributes());
-		case "Facebook" -> new FacebookUserInfo(oAuth2User.getAttributes());
-		default -> throw new IllegalArgumentException("Unexpected value: " + typeOAuth);
+			case "Google" -> new GoogleUserInfo(oAuth2User.getAttributes());
+			case "Facebook" -> new FacebookUserInfo(oAuth2User.getAttributes());
+			default -> throw new IllegalArgumentException("Unexpected value: " + typeOAuth);
 		};
 
 		User user;

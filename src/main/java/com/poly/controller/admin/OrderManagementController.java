@@ -31,6 +31,12 @@ public class OrderManagementController {
 
 	boolean edit = false;
 
+	/**
+	 * Phương thức này trả về trang quản lý đơn hàng của quản trị viên.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu đến view.
+	 * @return tên của trang quản lý đơn hàng.
+	 */
 	@GetMapping("admin/order")
 	public String getOrderManagement(Model model) {
 
@@ -46,6 +52,13 @@ public class OrderManagementController {
 		return "admin/order-management";
 	}
 
+	/**
+	 * Phương thức này được sử dụng để chỉnh sửa đơn hàng.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu đến view.
+	 * @param id    id của đơn hàng cần chỉnh sửa.
+	 * @return tên của view để hiển thị trang quản lý đơn hàng.
+	 */
 	@GetMapping(value = "admin/order", params = "btnEdit")
 	public String edit(Model model, @RequestParam("id") Long id) {
 		Order order = orderService.findById(id);
@@ -57,19 +70,25 @@ public class OrderManagementController {
 		return "admin/order-management";
 	}
 
+	/**
+	 * Phương thức lưu thông tin đơn hàng và cập nhật các trường thông tin của đơn
+	 * hàng.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param order đối tượng Order chứa thông tin đơn hàng cần lưu.
+	 * @return tên của trang View hiển thị quản lý đơn hàng sau khi lưu thành công.
+	 */
 	@PostMapping("admin/order")
 	public String save(Model model, @ModelAttribute("order") Order order) {
 		Order updatedOrder = orderService.findById(order.getId());
 
 		PaymentMethod paymentMethod = paymentMethodDAO.findById(order.getPaymentMethod().getId()).get();
 		updatedOrder.setPaymentMethod(paymentMethod);
-		
+
 		updatedOrder.setPaymentStatus(order.getPaymentStatus());
 
 		OrderStatus orderStatus = orderStatusDAO.findById(order.getOrderStatus().getId()).get();
 		updatedOrder.setOrderStatus(orderStatus);
-
-		
 
 		orderService.save(updatedOrder);
 		model.addAttribute("message", "Update order successfully");

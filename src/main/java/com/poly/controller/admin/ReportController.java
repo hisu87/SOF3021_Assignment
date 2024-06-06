@@ -38,57 +38,83 @@ import jakarta.validation.Valid;
 
 @Controller
 public class ReportController {
-	
+
 	@Autowired
 	ReportService reportService;
 	@Autowired
 	OrderService orderService;
 	@Autowired
 	SessionService session;
-	
+
 	Pageable pageable = PageRequest.of(0, 10);
-	
+
+	/**
+	 * Phương thức index được sử dụng để hiển thị trang quản lý báo cáo.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu cho view.
+	 * @return tên của view hiển thị trang quản lý báo cáo.
+	 */
 	@RequestMapping("/admin/report/index")
 	public String index(Model model) {
-		
+
 		List<String> days = orderService.findDays();
 		List<String> months = orderService.findMonths();
 		List<String> years = orderService.findYears();
-		
+
 		model.addAttribute("days", days);
 		model.addAttribute("months", months);
 		model.addAttribute("years", years);
-		
+
 		return "admin/report-management";
 	}
-	
+
+	/**
+	 * Phương thức này được sử dụng để xử lý yêu cầu GET "/admin/report".
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu cho view.
+	 * @param cd    đối tượng CreateDate được truyền từ form.
+	 * @return tên của view được chuyển tiếp đến.
+	 */
 	@RequestMapping("/admin/report")
 	public String get(Model model, @ModelAttribute("createDate") CreateDate cd) {
-		//model.addAttribute("counts", reportService.findByDrink(fromDate, toDate, pageable));
+		// model.addAttribute("counts", reportService.findByDrink(fromDate, toDate,
+		// pageable));
 		model.addAttribute("pages", reportService.findAll(pageable));
 		model.addAttribute("printExcel", false);
 		return "forward:/admin/report/index";
 	}
 
+	/**
+	 * Tìm kiếm báo cáo dựa trên ngày tháng năm.
+	 * 
+	 * @param model      đối tượng Model để truyền dữ liệu tới view
+	 * @param request    đối tượng HttpServletRequest để lấy thông tin request từ
+	 *                   client
+	 * @param createDate đối tượng CreateDate chứa thông tin về ngày tháng năm tạo
+	 *                   báo cáo
+	 * @return chuỗi "forward:/admin/report/index" để chuyển hướng tới trang báo cáo
+	 */
 	@PostMapping("/admin/report/search")
 	public String search(Model model, HttpServletRequest request,
 			@ModelAttribute("createDate") CreateDate createDate) {
-		
+
 		String day1 = createDate.getCreateDate1().getDay();
 		String day2 = createDate.getCreateDate2().getDay();
 		String month1 = createDate.getCreateDate1().getMonth();
 		String month2 = createDate.getCreateDate2().getMonth();
 		String year1 = createDate.getCreateDate1().getYear();
 		String year2 = createDate.getCreateDate2().getYear();
-		
+
 		StringBuilder date = new StringBuilder();
 		date.append(year1).append(" ").append(month1).append(" ").append(day1).toString();
-		if (day1.equals("1") && month1.equals("1") && year1.equals("1") && day2.equals("1") && month2.equals("1") && year2.equals("1")) {
+		if (day1.equals("1") && month1.equals("1") && year1.equals("1") && day2.equals("1") && month2.equals("1")
+				&& year2.equals("1")) {
 			model.addAttribute("pages", reportService.findAll(pageable));
 			model.addAttribute("isDrink", false);
 		} else if (!day2.equals("1") || !month2.equals("1") || !year2.equals("1")) {
 			date.append(year2).append(" ").append(month2).append(" ").append(day2).toString();
-			LocalDate fromDate = LocalDate.of(Integer.parseInt(year1), Integer.parseInt(month1), Integer.parseInt(day1));
+			LocalDate fromDate = LocalDate.of(Integer.parseInt(year1), Integer.parseInt(month1),
+					Integer.parseInt(day1));
 			LocalDate toDate = LocalDate.of(Integer.parseInt(year2), Integer.parseInt(month2), Integer.parseInt(day2));
 			model.addAttribute("pages", reportService.findByDrink(fromDate, toDate, pageable));
 			model.addAttribute("isDrink", true);
@@ -105,23 +131,31 @@ public class ReportController {
 				model.addAttribute("pages", reportService.findByDay(day1, pageable));
 			model.addAttribute("isDrink", false);
 		}
-		
+
 		Page<Report> pages = (Page<Report>) model.getAttribute("pages");
 		boolean isDrink = (boolean) model.getAttribute("isDrink");
-		
-		ExcelService.exportReportExcel(date.toString(), pages.getContent(), isDrink); 
-		
+
+		ExcelService.exportReportExcel(date.toString(), pages.getContent(), isDrink);
+
 		session.setAttribute("day1", day1);
 		session.setAttribute("day2", day2);
 		session.setAttribute("month1", month1);
 		session.setAttribute("month2", month2);
 		session.setAttribute("year1", year1);
 		session.setAttribute("year2", year2);
-		
+
 		model.addAttribute("printExcel", true);
 		return "forward:/admin/report/index";
 	}
-	
+
+	/**
+	 * Phương thức xử lý yêu cầu GET "/admin/report/page".
+	 * 
+	 * @param model      đối tượng Model để truyền dữ liệu cho view
+	 * @param createDate đối tượng CreateDate được truyền qua ModelAttribute
+	 * @param p          tham số truy vấn p được truyền qua RequestParam
+	 * @return chuỗi "forward:/admin/report/index"
+	 */
 	@GetMapping("/admin/report/page")
 	public String page(Model model, @ModelAttribute("createDate") CreateDate createDate,
 			@RequestParam("p") Optional<Integer> p) {
@@ -132,7 +166,7 @@ public class ReportController {
 		String year1 = session.getAttribute("year1");
 		String year2 = session.getAttribute("year2");
 		pageable = PageRequest.of(p.orElse(0), 10);
-		
+
 		if (day1 == null && month1 == null && year1 == null)
 			model.addAttribute("pages", reportService.findAll(pageable));
 		else if (day1.equals("1") && month1.equals("1") && year1.equals("1"))
@@ -149,22 +183,32 @@ public class ReportController {
 			else if (!day1.equals("1"))
 				model.addAttribute("pages", reportService.findByDay(day1, pageable));
 		}
-		
+
 		return "forward:/admin/report/index";
 	}
-	
+
+	/**
+	 * Phương thức này được sử dụng để đếm số lượng báo cáo.
+	 * 
+	 * @param model   đối tượng Model để truyền dữ liệu cho view
+	 * @param isDrink chuỗi biểu thị trạng thái có phải là đồ uống hay không
+	 * @param cd      đối tượng CreateDate chứa thông tin ngày tạo báo cáo
+	 * @return chuỗi "forward:/admin/report/index" để chuyển hướng đến trang index
+	 *         của báo cáo
+	 */
 	@PostMapping("/admin/report/count")
-	public String count(Model model, @RequestParam("isDrink") String isDrink, @ModelAttribute("createDate") CreateDate cd) {
+	public String count(Model model, @RequestParam("isDrink") String isDrink,
+			@ModelAttribute("createDate") CreateDate cd) {
 		boolean count = isDrink.equals("true") ? false : true;
 		model.addAttribute("isDrink", count);
-		
-		model.addAttribute("pages", (count ? reportService.findByDrink(pageable) 
-											: reportService.findAll(pageable)));
-		
+
+		model.addAttribute("pages", (count ? reportService.findByDrink(pageable)
+				: reportService.findAll(pageable)));
+
 		session.setAttribute("day", 1);
 		session.setAttribute("month", 1);
 		session.setAttribute("year", 1);
 		return "forward:/admin/report/index";
 	}
-	
+
 }

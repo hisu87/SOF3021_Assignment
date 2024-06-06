@@ -21,21 +21,26 @@ import com.poly.utils.ParamService;
 
 import jakarta.validation.Valid;
 
-
 @Controller
 public class UserManagementController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	RoleService roleService;
-	
+
 	@Autowired
 	ParamService paramService;
-	
+
 	boolean edit = false;
-	
+
+	/**
+	 * Phương thức này trả về tên của trang quản lý người dùng.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu cho view.
+	 * @return tên của trang quản lý người dùng.
+	 */
 	@GetMapping("admin/user")
 	public String getUserManagement(Model model) {
 
@@ -50,14 +55,22 @@ public class UserManagementController {
 
 		return "admin/user-management";
 	}
-	
+
 	@ModelAttribute("users")
-	public List<User> getUser(){
+	public List<User> getUser() {
 		return userService.findAll();
 	}
-	
+
+	/**
+	 * Phương thức save được sử dụng để lưu thông tin người dùng vào cơ sở dữ liệu.
+	 * 
+	 * @param model  đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param user   đối tượng User chứa thông tin người dùng cần lưu.
+	 * @param result đối tượng BindingResult để kiểm tra và xử lý lỗi nhập liệu.
+	 * @return tên của view để hiển thị kết quả.
+	 */
 	@PostMapping("admin/user")
-	public String save(Model model, @Valid @ModelAttribute("user") User user, 
+	public String save(Model model, @Valid @ModelAttribute("user") User user,
 			BindingResult result) {
 
 		if (result.hasErrors()) {
@@ -65,11 +78,11 @@ public class UserManagementController {
 			System.out.println(result.hasErrors());
 		} else {
 			User updatedUser = userService.findById(user.getId());
-			
+
 			updatedUser.setActive(user.getActive());
-			
+
 			boolean admin = paramService.getBoolean("admin", false);
-			
+
 			if (admin == true && !updatedUser.isAdmin()) {
 				updatedUser = roleService.assignUserToRole(updatedUser.getId(), 1);
 			} else if (admin == false && updatedUser.isAdmin()) {
@@ -91,7 +104,14 @@ public class UserManagementController {
 
 		return "admin/user-management";
 	}
-	
+
+	/**
+	 * Phương thức này được sử dụng để chỉnh sửa thông tin người dùng.
+	 * 
+	 * @param model đối tượng Model để truyền dữ liệu giữa Controller và View.
+	 * @param id    id của người dùng cần chỉnh sửa.
+	 * @return tên của trang quản lý người dùng.
+	 */
 	@GetMapping(value = "admin/user", params = "btnEdit")
 	public String edit(Model model, @RequestParam("id") Long id) {
 		User user = userService.findById(id);
@@ -102,7 +122,7 @@ public class UserManagementController {
 
 		return "admin/user-management";
 	}
-	
+
 	@PostMapping("admin/user/delete/{id}")
 	public String delete(@PathVariable("id") Long id) {
 		userService.deleteById(id);
@@ -110,12 +130,17 @@ public class UserManagementController {
 		return "redirect:/admin/user";
 	}
 
+	/**
+	 * Xóa người dùng theo tên người dùng.
+	 * 
+	 * @param username Tên người dùng cần xóa.
+	 * @return Đường dẫn chuyển hướng đến trang quản lý người dùng.
+	 */
 	@GetMapping(value = "admin/user", params = "btnDel")
 	public String deleteInline(@RequestParam("username") Long username) {
 		userService.deleteById(username);
 
 		return "redirect:/admin/user";
 	}
-	
 
 }

@@ -116,34 +116,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		Set<CartItem> cartItems = cart.getCartItems();
 
 		CartItem cartItem = findCartItem(cartItems, drink.getId());
-		
+
 		cartItems.remove(cartItem);
 		cartItemDAO.delete(cartItem);
-		
+
 		int totalItems = totalItems(cartItems);
 		double totalPrice = totalPrice(cartItems);
-		
+
 		cart.setCartItems(cartItems);
 		cart.setTotalItems(totalItems);
 		cart.setTotalPrice(totalPrice);
 
 		return shoppingCartDAO.save(cart);
 	}
-	
+
 	@Override
 	public void deleteCartById(Long id) {
 		ShoppingCart cart = shoppingCartDAO.findById(id).get();
-		
+
 		Set<CartItem> cartItems = cart.getCartItems();
-		
+
 		cartItemDAO.deleteAll(cartItems);
-		
+
 		cartItems.clear();
-		
+
 		cart.setCartItems(cartItems);
-		
+
 		shoppingCartDAO.save(cart);
-		
+
 	}
 
 	private CartItem findCartItem(Set<CartItem> cartItems, Integer drinkId) {
@@ -189,7 +189,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		cart.setUser(user);
 		return shoppingCartDAO.save(cart);
 	}
-
-	
 
 }
