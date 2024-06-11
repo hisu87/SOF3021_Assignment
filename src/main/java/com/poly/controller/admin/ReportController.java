@@ -197,8 +197,7 @@ public class ReportController {
 	 *         của báo cáo
 	 */
 	@PostMapping("/admin/report/count")
-	public String count(Model model, @RequestParam("isDrink") String isDrink,
-			@ModelAttribute("createDate") CreateDate cd) {
+	public String count(Model model, @RequestParam("isDrink") String isDrink, @ModelAttribute("createDate") CreateDate cd) {
 		boolean count = isDrink.equals("true") ? false : true;
 		model.addAttribute("isDrink", count);
 

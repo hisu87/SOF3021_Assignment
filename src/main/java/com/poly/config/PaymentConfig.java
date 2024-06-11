@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PaymentConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:8080/order";
-    public static String vnp_TmnCode = "9JBCP7S8";
-    public static String secretKey = "V0RIFXPMNO4L15XAXI5TE969K4WG9I40";
+    public static String vnp_TmnCode = "YTW40XHE";
+    public static String secretKey = "KPHCCACUBHLKCPGRQSFYQPKGLYRVJEEE";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
@@ -59,7 +59,7 @@ public class PaymentConfig {
         return digest;
     }
 
-    // Util for VNPAY
+    //Util for VNPAY
     public static String hashAllFields(Map fields) {
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);
@@ -77,7 +77,7 @@ public class PaymentConfig {
                 sb.append("&");
             }
         }
-        return hmacSHA512(secretKey, sb.toString());
+        return hmacSHA512(secretKey,sb.toString());
     }
 
     public static String hmacSHA512(final String key, final String data) {

@@ -72,7 +72,7 @@ public class SecurityConfiguration {
 						.requestMatchers("/account/profile", "/account/change-password", "/cart/**", "/checkout/**",
 								"/order/**")
 						.authenticated()
-						// .requestMatchers("/admin/**").hasRole("ADMIN")
+						 .requestMatchers("/admin/**").hasAnyAuthority("admin")
 						.anyRequest().permitAll())
 				.formLogin(form -> form
 						.loginPage("/account/login")

@@ -77,4 +77,5 @@ public interface ReportService {
 	 * @return danh sách báo cáo theo ngày và trang
 	 */
 	Page<Report> findByDrink(LocalDate fromDate, LocalDate toDate, Pageable pageable);
+	Page<Report> findByDrink(Pageable pageable);
 }

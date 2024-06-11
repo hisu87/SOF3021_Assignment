@@ -38,13 +38,6 @@ public class PaymentController {
 	@Autowired
 	UserService userService;
 
-	/**
-	 * Phương thức createPayment() được sử dụng để tạo một đối tượng ModelAndView và
-	 * chuyển hướng người dùng đến URL thanh toán.
-	 *
-	 * @return Đối tượng ModelAndView chứa thông tin về URL thanh toán.
-	 * @throws UnsupportedEncodingException Nếu có lỗi xảy ra khi mã hóa URL.
-	 */
 	@GetMapping("/create_payment")
 	public ModelAndView createPayment() throws UnsupportedEncodingException {
 
@@ -81,12 +74,12 @@ public class PaymentController {
 		vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
 		vnp_Params.put("vnp_OrderType", orderType);
 
-		// String locate = req.getParameter("language");
-		// if (locate != null && !locate.isEmpty()) {
-		// vnp_Params.put("vnp_Locale", locate);
-		// } else {
-		// vnp_Params.put("vnp_Locale", "vn");
-		// }
+//	        String locate = req.getParameter("language");
+//	        if (locate != null && !locate.isEmpty()) {
+//	            vnp_Params.put("vnp_Locale", locate);
+//	        } else {
+//	            vnp_Params.put("vnp_Locale", "vn");
+//	        }
 		vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
 		vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
